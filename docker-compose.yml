@@ -1,0 +1,30 @@
+version: '2'
+services:
+    web:
+        build: ./composeflask
+        ports:
+            - "5000:5000"
+        volumes:
+            - .:/code
+        depends_on:
+            - redis
+    redis:
+        image: redis
+
+    nginxstatic:
+        image: nginx
+        ports:
+            - "80:80"
+        container_name: abubarkarproxy
+        volumes:
+            - ./nginxproxy/:/etc/nginx/conf.d/
+        environment:
+            - NGINX= web
+
+    # nginxproxytest:
+    #   build: ./ngnixproxy
+    #   container_name: abubarkarproxy
+    #   environment:
+    #     - NGINX=web
+    #   networks:
+    #     - mynetwork
